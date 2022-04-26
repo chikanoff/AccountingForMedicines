@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+                   http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+    <changeSet id="create-medicines_accountings-table" author="chikanoff">
+        <createTable tableName="medicines_accountings">
+            <column name="id" type="bigInt">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="accounting_id" type="bigInt">
+                <constraints nullable="false"/>
+            </column>
+            <column name="medicine_id" type="bigInt">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="decimal">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint  baseColumnNames="accounting_id"
+                                  baseTableName="medicines_accountings"
+                                  constraintName="fk_accounting_medicine"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableName="accountings"
+                                  validate="true"/>
+        <addForeignKeyConstraint  baseColumnNames="medicine_id"
+                                  baseTableName="medicines_accountings"
+                                  constraintName="fk_medicine_accounting"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableName="medicines"
+                                  validate="true"/>
+    </changeSet>
+</databaseChangeLog>
