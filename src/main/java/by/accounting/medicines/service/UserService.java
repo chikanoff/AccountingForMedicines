@@ -1,5 +1,6 @@
 package by.accounting.medicines.service;
 
+import by.accounting.medicines.auth.jwt.model.UserDetailsImpl;
 import by.accounting.medicines.exception.ItemNotFoundException;
 import by.accounting.medicines.mapper.UserMapper;
 import by.accounting.medicines.model.dto.request.user.PatchUserRequest;
@@ -8,6 +9,7 @@ import by.accounting.medicines.model.entity.User;
 import by.accounting.medicines.repository.UserRepository;
 import by.accounting.medicines.util.ErrorResponseUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,11 @@ public class UserService {
      * @return User object
      */
     public User getUserFromJwt() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null) {
+            return null;
+        }
+        String username = authentication.getName();
         return userRepository.findByUsername(username).orElseThrow(ItemNotFoundException::new);
     }
 

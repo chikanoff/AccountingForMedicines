@@ -30,7 +30,7 @@ import java.util.Collections;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] AUTH_WHITE_LIST = {
             "/error/**",
-            "/api/auth/signin",
+            "/api/auth/**",
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };

@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+    app_server:
+        image: 'chikanoff/accounting-medicines:latest'
+        container_name: app_server
+        ports:
+            - "8080:8080"
+        depends_on:
+            - db
+        environment:
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/accounting
+            - SPRING_DATASOURCE_USERNAME=${DATABASE_USERNAME}
+            - SPRING_DATASOURCE_PASSWORD=${DATABASE_PASSWORD}
+            - JWT_EXPIRATION=${JWT_EXPIRATION}
+            - PRIVATE_KEY=${PRIVATE_KEY}
+            - PUBLIC_KEY=${PUBLIC_KEY}
+            - ACCESS_TOKEN=${ACCESS_TOKEN}
+            - REFRESH_TOKEN=${REFRESH_TOKEN}
+        networks:
+            - backend
+
+    db:
+        image: 'postgres:14-alpine'
+        restart: always
+        container_name: db
+        ports:
+            - "5431:5432"
+        environment:
+            - POSTGRES_USER=${DATABASE_USERNAME}
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+            - POSTGRES_DB=accounting
+        networks:
+            - backend
+        volumes:
+            - db-data:/var/lib/postgresql
+
+volumes:
+    db-data:
+
+networks:
+    backend:

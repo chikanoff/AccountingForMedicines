@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.5.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.google.cloud.tools.jib' version '3.2.1'
 }
 
 group 'by.accounting.medicines'
@@ -51,6 +52,9 @@ dependencies {
     testImplementation "com.playtika.testcontainers:embedded-postgresql:$testContainersVersion"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 }
+
+tasks.build.dependsOn tasks.jibDockerBuild
+jibDockerBuild.targetImage = 'accounting-medicines'
 
 test {
     useJUnitPlatform()

@@ -8,8 +8,13 @@ import by.accounting.medicines.model.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import javax.servlet.http.Cookie;
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -35,9 +40,7 @@ public class UserControllerTest extends IntegrationTestBase {
                                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk()).andReturn();
 
-        return result.getResponse().getContentAsString()
-                .replace("{\"token\":\"", "")
-                .replace("\"}", "");
+        return Objects.requireNonNull(result.getResponse().getCookie("accessToken")).getValue();
     }
 
     @Test
@@ -45,7 +48,7 @@ public class UserControllerTest extends IntegrationTestBase {
         String token = getTokenFromAuthorization();
 
         mvc.perform(get("/api/user")
-                        .header("Authorization", "Bearer " + token)
+                        .cookie(new Cookie("accessToken", token))
                         .contentType("application/json"))
                         .andExpect(status().isOk());
     }
@@ -58,7 +61,7 @@ public class UserControllerTest extends IntegrationTestBase {
         req.setPassword("newPassword");
 
         mvc.perform(patch("/api/user")
-                        .header("Authorization", "Bearer " + token)
+                        .cookie(new Cookie("accessToken", token))
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk());

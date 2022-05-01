@@ -1,5 +1,6 @@
 package by.accounting.medicines.auth.jwt;
 
+import by.accounting.medicines.auth.jwt.model.UserDetailsImpl;
 import by.accounting.medicines.auth.util.DateUtil;
 import by.accounting.medicines.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
@@ -8,6 +9,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -41,6 +45,9 @@ public class JwtService {
     }
 
     public boolean validateToken(String jwt) {
+        if(jwt == null) {
+            return false;
+        }
         try {
             Jwts.parser().setSigningKey(jwtKeyProvider.getPublicKey()).parseClaimsJws(jwt);
             return true;
@@ -48,6 +55,10 @@ public class JwtService {
             log.warn("Invalid JWT!", e);
         }
         return false;
+    }
+
+    public void addTokenToCookie(HttpHeaders headers, String token) {
+        headers.add(HttpHeaders.SET_COOKIE, ResponseCookie.from(jwtProperties.getAccessToken(), token).maxAge(jwtProperties.getExpiration()).build().toString());
     }
 
     public String getUsernameFrom(String jwt) {
@@ -59,5 +70,9 @@ public class JwtService {
                 .setSigningKey(jwtKeyProvider.getPublicKey())
                 .parseClaimsJws(jwt)
                 .getBody();
+    }
+
+    public void invalidateToken(String accessToken) {
+        // do nothing
     }
 }
