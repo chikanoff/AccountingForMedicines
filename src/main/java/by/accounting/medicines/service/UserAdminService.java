@@ -129,4 +129,8 @@ public class UserAdminService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException("Item not found with id " + id, ErrorResponseUtil.USER_NOT_FOUND));
     }
+
+    public List<UserResponse> getAll() {
+        return userRepository.findAll().stream().map(userMapper::userToUserResponse).toList();
+    }
 }

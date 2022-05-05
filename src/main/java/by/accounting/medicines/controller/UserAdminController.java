@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/users")
@@ -40,6 +41,11 @@ public class UserAdminController {
     @GetMapping
     public Page<UserResponse> getPage(Pageable pageable) {
         return userAdminService.getPage(pageable);
+    }
+
+    @GetMapping("/all")
+    public List<UserResponse> getAll() {
+        return userAdminService.getAll();
     }
 
     @PostMapping

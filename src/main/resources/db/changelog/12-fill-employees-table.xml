@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+  http://www.liquibase.org/xml/ns/pro
+  http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+    <changeSet author="chikanoff" id="fill-employees-table">
+        <insert schemaName="public"
+                tableName="employees">
+            <column name="full_name" value="Петрова Ольга Александровна"/>
+            <column name="department_id" valueComputed="(SELECT id from departments where name='Отделение профилактики')"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="employees">
+            <column name="full_name" value="Иванова Ирина Сергеевна"/>
+            <column name="department_id" valueComputed="(SELECT id from departments where name='Отделение педиатрическое')"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="employees">
+            <column name="full_name" value="Григорьева Лидия Николаевна"/>
+            <column name="department_id" valueComputed="(SELECT id from departments where name='Отделение восстановительного лечения')"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="employees">
+            <column name="full_name" value="Петрусевич Александра Викторовна"/>
+            <column name="department_id" valueComputed="(SELECT id from departments where name='Лечебно-профилактическое отделение')"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="employees">
+            <column name="full_name" value="Перепалова Елизавета Петровна"/>
+            <column name="department_id" valueComputed="(SELECT id from departments where name='Вспомогательно-диагностическое отделение')"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

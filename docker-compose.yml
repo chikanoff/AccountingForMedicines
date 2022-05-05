@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
     app_server:
-        image: 'chikanoff/accounting-medicines:latest'
+        image: 'accounting-medicines:latest'
         container_name: app_server
         ports:
             - "8080:8080"

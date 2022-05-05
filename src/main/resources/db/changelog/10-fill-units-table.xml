@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+  http://www.liquibase.org/xml/ns/pro
+  http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+    <changeSet author="chikanoff" id="fill-units-table">
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="амп"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="табл"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="шт"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="г"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="упак"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="мл"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="кг"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="флак"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="литр"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="пара"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="набор"/>
+        </insert>
+        <insert schemaName="public"
+                tableName="units">
+            <column name="name" value="мг"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

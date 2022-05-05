@@ -7,5 +7,4 @@ import lombok.Setter;
 @Setter
 public class SupplierDto {
     private String name;
-    private String ttnNumber;
 }

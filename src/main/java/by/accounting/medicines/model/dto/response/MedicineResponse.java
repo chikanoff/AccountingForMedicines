@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 public class MedicineResponse {
     private Long id;
 
+    private String name;
+
     private String number;
 
     private SupplierResponse supplier;

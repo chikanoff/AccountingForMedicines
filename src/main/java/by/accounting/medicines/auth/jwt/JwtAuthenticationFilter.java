@@ -30,13 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        Optional.ofNullable(getJwtToken(request, true))
+        String token = getJwtToken(request, true);
+        Optional.ofNullable(token)
                 .filter(jwtService::validateToken)
                 .map(jwtService::getUsernameFrom)
                 .map(userDetailsService::loadUserByUsername)
                 .map(user -> new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()))
                 .ifPresent(SecurityContextHolder.getContext()::setAuthentication);
-
         filterChain.doFilter(request, response);
     }
 

@@ -27,7 +27,4 @@ public class Supplier {
 
     @Column
     private String name;
-
-    @Column(name = "ttn_number")
-    private String ttnNumber;
 }

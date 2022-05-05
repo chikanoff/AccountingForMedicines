@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CookieValue;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class AuthService {
         );
     }
 
-    public ResponseEntity<Boolean> check(String accessToken) {
+    public ResponseEntity<Boolean> check(@CookieValue(name = "accessToken") String accessToken) {
         return ResponseEntity.ok(jwtService.validateToken(accessToken));
     }
 
@@ -56,8 +57,9 @@ public class AuthService {
         return ResponseEntity.ok(new JwtResponse(user.getUsername(), user.getRole().name().equals("ROLE_ADMIN")));
     }
 
-    public ResponseEntity<String> logout(String accessToken) {
-        jwtService.invalidateToken(accessToken);
-        return ResponseEntity.ok("success");
+    public ResponseEntity<String> logout(@CookieValue(name = "accessToken") String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        jwtService.invalidateToken(headers, accessToken);
+        return ResponseEntity.ok().headers(headers).body("success");
     }
 }

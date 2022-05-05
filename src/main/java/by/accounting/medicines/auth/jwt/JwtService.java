@@ -58,7 +58,12 @@ public class JwtService {
     }
 
     public void addTokenToCookie(HttpHeaders headers, String token) {
-        headers.add(HttpHeaders.SET_COOKIE, ResponseCookie.from(jwtProperties.getAccessToken(), token).maxAge(jwtProperties.getExpiration()).build().toString());
+        headers.add(HttpHeaders.SET_COOKIE, ResponseCookie.from(jwtProperties.getAccessToken(), token)
+                .maxAge(jwtProperties.getExpiration())
+                .httpOnly(true)
+                .path("/")
+                .sameSite("None")
+                .secure(true).build().toString());
     }
 
     public String getUsernameFrom(String jwt) {
@@ -72,7 +77,12 @@ public class JwtService {
                 .getBody();
     }
 
-    public void invalidateToken(String accessToken) {
-        // do nothing
+    public void invalidateToken(HttpHeaders headers, String accessToken) {
+        headers.add(HttpHeaders.SET_COOKIE, ResponseCookie.from(jwtProperties.getAccessToken(), null)
+                .maxAge(0)
+                .httpOnly(true)
+                .path("/")
+                .sameSite("None")
+                .secure(true).build().toString());
     }
 }

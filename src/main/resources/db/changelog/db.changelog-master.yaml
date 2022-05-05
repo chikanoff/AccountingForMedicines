@@ -17,3 +17,13 @@ databaseChangeLog:
           file: db/changelog/08-create-accountings-scheme.xml
     - include:
           file: db/changelog/09-create-medicines-accountings-scheme.xml
+    - include:
+        file: db/changelog/10-fill-units-table.xml
+    - include:
+        file: db/changelog/11-fill-departments-table.xml
+    - include:
+        file: db/changelog/12-fill-employees-table.xml
+    - include:
+        file: db/changelog/13-create-default-user.xml
+    - include:
+        file: db/changelog/14-fill-suppliers-table.xml
