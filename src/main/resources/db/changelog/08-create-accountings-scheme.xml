@@ -14,7 +14,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="recipient_id" type="bigInt">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="is_income" type="boolean">
                 <constraints nullable="false"/>

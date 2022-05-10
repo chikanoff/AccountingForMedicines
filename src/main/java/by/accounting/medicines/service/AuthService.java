@@ -30,19 +30,23 @@ public class AuthService {
      * @param req Request with username and password fields
      * @return JwtResponse
      */
-    public ResponseEntity<JwtResponse> login(SignInRequest req) {
+    public ResponseEntity<?> login(SignInRequest req) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String jwt = jwtService.generateToken(userDetails);
         HttpHeaders headers = new HttpHeaders();
         jwtService.addTokenToCookie(headers, jwt);
-        return ResponseEntity.ok().headers(headers).body(new JwtResponse(
-                userDetails.getUsername(),
-                userDetails.getAuthorities()
-                        .stream()
-                        .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN")))
-        );
+        try {
+            User user = userService.findByUsername(userDetails.getUsername());
+            return ResponseEntity.ok().headers(headers).body(new JwtResponse(user.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getAuthorities()
+                            .stream()
+                            .anyMatch(x -> x.getAuthority().equals("ROLE_ADMIN"))));
+        } catch(Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     public ResponseEntity<Boolean> check(@CookieValue(name = "accessToken") String accessToken) {
@@ -54,7 +58,7 @@ public class AuthService {
         if(user == null) {
             return ResponseEntity.ok(new JwtResponse());
         }
-        return ResponseEntity.ok(new JwtResponse(user.getUsername(), user.getRole().name().equals("ROLE_ADMIN")));
+        return ResponseEntity.ok(new JwtResponse(user.getId(), user.getUsername(), user.getRole().name().equals("ROLE_ADMIN")));
     }
 
     public ResponseEntity<String> logout(@CookieValue(name = "accessToken") String accessToken) {

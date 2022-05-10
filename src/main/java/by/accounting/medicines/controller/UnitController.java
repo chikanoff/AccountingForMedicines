@@ -20,8 +20,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/units")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@RequestMapping("/api/units")
+@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USE')")
 @Tag(name = "Admin units configuration API")
 @SecurityRequirement(name = "security")
 @RequiredArgsConstructor

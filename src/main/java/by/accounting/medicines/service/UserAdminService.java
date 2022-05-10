@@ -36,7 +36,7 @@ public class UserAdminService {
         checkUsernameNotExist(req.getUsername());
         checkEmailNotExist(req.getEmail());
         User user = userMapper.createUserRequestToUser(req);
-        user.setRole(UserRole.ROLE_USER);
+        user.setRole(UserRole.valueOf(req.getRole()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }

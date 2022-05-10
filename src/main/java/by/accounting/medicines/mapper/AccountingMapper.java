@@ -12,7 +12,7 @@ public interface AccountingMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "employee", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "medicines", ignore = true)
+    @Mapping(target = "medicineAccountings", ignore = true)
     Accounting toEntity(AccountingDto accountingDto);
 
     @Mapping(target = "medicines", ignore = true)
@@ -21,6 +21,6 @@ public interface AccountingMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "employee", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "medicines", ignore = true)
+    @Mapping(target = "medicineAccountings", ignore = true)
     void updateEntity(AccountingDto accountingDto, @MappingTarget Accounting accounting);
 }

@@ -3,6 +3,7 @@ package by.accounting.medicines.model.dto.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +11,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class AccountingDto {
-    private Date date;
 
     private Long employeeId;
 
@@ -18,5 +18,5 @@ public class AccountingDto {
 
     private Long userId;
 
-    private Set<Long> medicineIds = new HashSet<>();
+    private Set<MedicineAccoutingDto> medicines = new HashSet<>();
 }

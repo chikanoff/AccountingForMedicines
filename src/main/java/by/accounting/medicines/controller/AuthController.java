@@ -21,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtResponse> login(@RequestBody SignInRequest req) {
+    public ResponseEntity<?> login(@RequestBody SignInRequest req) {
         return authService.login(req);
     }
 

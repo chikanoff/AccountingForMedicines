@@ -2,15 +2,19 @@ package by.accounting.medicines.service;
 
 import by.accounting.medicines.exception.ItemNotFoundException;
 import by.accounting.medicines.mapper.AccountingMapper;
+import by.accounting.medicines.mapper.MedicineAccountingMapper;
 import by.accounting.medicines.mapper.MedicineMapper;
 import by.accounting.medicines.model.dto.entity.AccountingDto;
+import by.accounting.medicines.model.dto.entity.MedicineAccoutingDto;
 import by.accounting.medicines.model.dto.entity.MedicineDto;
 import by.accounting.medicines.model.dto.request.accounting.AccountingByDateBetweenRequest;
 import by.accounting.medicines.model.dto.response.AccountingResponse;
 import by.accounting.medicines.model.dto.response.MedicineResponse;
 import by.accounting.medicines.model.entity.Accounting;
 import by.accounting.medicines.model.entity.Medicine;
+import by.accounting.medicines.model.entity.MedicineAccounting;
 import by.accounting.medicines.repository.AccountingRepository;
+import by.accounting.medicines.repository.MedicineAccountingRepository;
 import by.accounting.medicines.repository.MedicineRepository;
 import by.accounting.medicines.util.ErrorResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +22,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +35,9 @@ public class AccountingService {
     private final MedicineService medicineService;
     private final EmployeeService employeeService;
     private final UserService userService;
+    private final MedicineAccountingMapper medicineAccountingMapper;
+
+    private final MedicineAccountingRepository medicineAccountingRepository;
 
     public List<AccountingResponse> getAll() {
         return accountingRepository.findAll().stream().map(accountingMapper::toResponse).toList();
@@ -44,21 +53,22 @@ public class AccountingService {
 
     public AccountingResponse create(AccountingDto accountingDto) {
         Accounting accounting = accountingMapper.toEntity(accountingDto);
-        accounting.setEmployee(employeeService.findByIdOrThrow(accountingDto.getEmployeeId()));
+        accounting.setDate(new Date());
+        if (!accountingDto.isIncome()) {
+            accounting.setEmployee(employeeService.findByIdOrThrow(accountingDto.getEmployeeId()));
+        }
         accounting.setUser(userService.findByIdOrThrow(accountingDto.getUserId()));
-        accounting.setMedicines(new HashSet<>(medicineService.findAllByIds(accountingDto.getMedicineIds())));
 
-        return accountingMapper.toResponse(accountingRepository.save(accounting));
-    }
+        Accounting saved = accountingRepository.save(accounting);
 
-    public AccountingResponse update(Long id, AccountingDto accountingDto) {
-        Accounting accounting = findByIdOrThrow(id);
-        accountingMapper.updateEntity(accountingDto, accounting);
-        accounting.setEmployee(employeeService.findByIdOrThrow(accountingDto.getEmployeeId()));
-        accounting.setUser(userService.findByIdOrThrow(accountingDto.getUserId()));
-        accounting.setMedicines(new HashSet<>(medicineService.findAllByIds(accountingDto.getMedicineIds())));
+        accountingDto.getMedicines().forEach(x -> {
+            MedicineAccounting ma = medicineAccountingMapper.toEntity(x);
+            ma.setAccounting(saved);
+            ma.setMedicine(medicineService.findByIdOrThrow(x.getMedicineId()));
+            medicineAccountingRepository.save(ma);
+        });
 
-        return accountingMapper.toResponse(accountingRepository.save(accounting));
+        return accountingMapper.toResponse(accountingRepository.getById(saved.getId()));
     }
 
     public List<AccountingResponse> findByDateBetween(AccountingByDateBetweenRequest req) {

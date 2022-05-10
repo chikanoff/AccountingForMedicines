@@ -28,4 +28,8 @@ public class CreateUserRequest {
     @NotEmpty
     @Size(min = 8, max = 40)
     private String password;
+
+    @NotEmpty
+    @Size(min = 8, max = 40)
+    private String role;
 }

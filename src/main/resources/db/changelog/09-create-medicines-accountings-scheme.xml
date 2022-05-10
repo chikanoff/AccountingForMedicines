@@ -23,6 +23,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addAutoIncrement tableName="medicines_accountings"
+                          columnDataType="bigInt"
+                          columnName="id"
+                          startWith="1"
+                          incrementBy="1" />
         <addForeignKeyConstraint  baseColumnNames="accounting_id"
                                   baseTableName="medicines_accountings"
                                   constraintName="fk_accounting_medicine"

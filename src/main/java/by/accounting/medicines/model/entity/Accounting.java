@@ -37,7 +37,7 @@ public class Accounting {
     private Date date;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "recepient_id", referencedColumnName = "id")
+    @JoinColumn(name = "recipient_id", referencedColumnName = "id")
     private Employee employee;
 
     @Column(name = "is_income")
@@ -50,5 +50,5 @@ public class Accounting {
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "medicines_accountings", joinColumns = {@JoinColumn(name = "accounting_id")},
             inverseJoinColumns = {@JoinColumn(name = "medicine_id")})
-    private Set<Medicine> medicines;
+    private Set<MedicineAccounting> medicineAccountings;
 }

@@ -49,11 +49,6 @@ public class AccountingController {
         return accountingService.create(accountingDto);
     }
 
-    @PutMapping("/{id}")
-    public AccountingResponse update(@PathVariable("id") Long id, @Valid @RequestBody AccountingDto accountingDto) {
-        return accountingService.update(id, accountingDto);
-    }
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         accountingService.delete(id);
