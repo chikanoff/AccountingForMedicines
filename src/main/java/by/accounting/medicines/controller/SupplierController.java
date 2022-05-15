@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/suppliers")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 @Tag(name = "Admin suppliers configuration API")
 @SecurityRequirement(name = "security")
 @RequiredArgsConstructor

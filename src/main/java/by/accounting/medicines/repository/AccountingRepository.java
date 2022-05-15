@@ -8,5 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface AccountingRepository extends JpaRepository<Accounting, Long> {
+
+    List<Accounting> findByIncome(boolean income);
     List<Accounting> findByDateBetween(Date startDate, Date endDate);
 }

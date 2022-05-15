@@ -22,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -36,7 +38,6 @@ public class AccountingService {
     private final EmployeeService employeeService;
     private final UserService userService;
     private final MedicineAccountingMapper medicineAccountingMapper;
-
     private final MedicineAccountingRepository medicineAccountingRepository;
 
     public List<AccountingResponse> getAll() {
@@ -71,9 +72,18 @@ public class AccountingService {
         return accountingMapper.toResponse(accountingRepository.getById(saved.getId()));
     }
 
-    public List<AccountingResponse> findByDateBetween(AccountingByDateBetweenRequest req) {
-        return accountingRepository.findByDateBetween(req.getStartDate(), req.getEndDate()).stream()
+    public List<AccountingResponse> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate) {
+        Date start = Date.from(startDate
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        Date end = Date.from(endDate
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        List<AccountingResponse> res = accountingRepository.findByDateBetween(start, end).stream()
                 .map(accountingMapper::toResponse).toList();
+        res.forEach(x -> x.setMedicines(new HashSet<>(medicineAccountingRepository.findByAccountingId(x.getId()).stream().map(medicineAccountingMapper::toResponse).toList())));
+
+        return res;
     }
 
     public void delete(Long id) {
@@ -83,5 +93,11 @@ public class AccountingService {
     public Accounting findByIdOrThrow(Long id) {
         return accountingRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException("Medicine with id " + id + " not found", ErrorResponseUtil.MEDICINE_NOT_FOUND));
+    }
+
+    public List<AccountingResponse> findByIncome(boolean income) {
+        List<AccountingResponse> accounting = accountingRepository.findByIncome(income).stream().map(accountingMapper::toResponse).toList();
+        accounting.forEach(x -> x.setMedicines(new HashSet<>(medicineAccountingRepository.findByAccountingId(x.getId()).stream().map(medicineAccountingMapper::toResponse).toList())));
+        return accounting;
     }
 }

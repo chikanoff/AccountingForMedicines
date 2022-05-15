@@ -1,5 +1,6 @@
 package by.accounting.medicines.model.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 public class AccountingResponse {
     private Long id;
 
+    @JsonFormat(pattern="dd-MM-yyyy", timezone = "Europe/Minsk")
     private Date date;
 
     private EmployeeResponse employee;
@@ -20,5 +22,5 @@ public class AccountingResponse {
 
     private UserResponse user;
 
-    private Set<MedicineResponse> medicines = new HashSet<>();
+    private Set<MedicineAccountingResponse> medicines = new HashSet<>();
 }

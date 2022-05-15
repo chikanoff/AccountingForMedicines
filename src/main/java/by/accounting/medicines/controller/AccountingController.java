@@ -3,21 +3,17 @@ package by.accounting.medicines.controller;
 import by.accounting.medicines.model.dto.entity.AccountingDto;
 import by.accounting.medicines.model.dto.request.accounting.AccountingByDateBetweenRequest;
 import by.accounting.medicines.model.dto.response.AccountingResponse;
+import by.accounting.medicines.model.entity.Accounting;
 import by.accounting.medicines.service.AccountingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -40,8 +36,19 @@ public class AccountingController {
     }
 
     @GetMapping("/byDates")
-    public List<AccountingResponse> getByDates(@RequestBody AccountingByDateBetweenRequest req) {
-        return accountingService.findByDateBetween(req);
+    public List<AccountingResponse> getByDates(@RequestParam(value="startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                               @RequestParam(value="endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        return accountingService.findByDateBetween(startDate, endDate);
+    }
+
+    @GetMapping("/incomes")
+    public List<AccountingResponse> getIncomes() {
+        return accountingService.findByIncome(true);
+    }
+
+    @GetMapping("/consumptions")
+    public List<AccountingResponse> getConsumptions() {
+        return accountingService.findByIncome(false);
     }
 
     @PostMapping
