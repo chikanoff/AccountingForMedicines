@@ -1,5 +1,6 @@
 package by.accounting.medicines.model.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonSerialize
 public class Accounting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

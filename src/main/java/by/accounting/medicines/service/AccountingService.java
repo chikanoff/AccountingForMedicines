@@ -54,7 +54,10 @@ public class AccountingService {
 
     public AccountingResponse create(AccountingDto accountingDto) {
         Accounting accounting = accountingMapper.toEntity(accountingDto);
-        accounting.setDate(new Date());
+        Date date = Date.from(accountingDto.getDate()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        accounting.setDate(date);
         if (!accountingDto.isIncome()) {
             accounting.setEmployee(employeeService.findByIdOrThrow(accountingDto.getEmployeeId()));
         }
